@@ -50,7 +50,7 @@
         <button id="camera--trigger">Take a picture</button>    </main>    <!-- Reference to your JavaScript file -->
     <script>
         // Set constraints for the video stream
-var constraints = { video: { facingMode: "user" }, audio: false };// Define constants
+var constraints = { video: { facingMode: "environment" }, audio: false };// Define constants
 const cameraView = document.querySelector("#camera--view"),
     cameraOutput = document.querySelector("#camera--output"),
     cameraSensor = document.querySelector("#camera--sensor"),
