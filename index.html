@@ -1,79 +1,226 @@
-<html lang=”en”><head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">    <!-- Name of your awesome camera app -->
-    <title>Camera App</title>    <!-- Link to your main style sheet-->
-    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Capture.
+    </title>
+
+    <!-- Link to Stylesheet -->
+    <!-- <link rel="stylesheet" href="./styles/style.css"> -->
     <style>
-        html, body{
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-  }#camera, #camera--view, #camera--sensor, #camera--output{
-      position: fixed;
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-  }#camera--view, #camera--sensor, #camera--output{
-      transform: scaleX(-1);
-      filter: FlipH;
-  }#camera--trigger{
-      width: 200px;
-      background-color: black;
-      color: white;
-      font-size: 16px;
-      border-radius: 30px;
-      border: none;
-      padding: 15px 20px;
-      text-align: center;
-      box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
-      position: fixed;
-      bottom: 30px;
-      left: calc(50% - 100px);
-  }.taken{
-      height: 100px!important;
-      width: 100px!important;
-      transition: all 0.5s ease-in;
-      border: solid 3px white;
-      box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
-      top: 20px;
-      right: 20px;
-      z-index: 2;
-  }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&display=swap');
+        
+        * {
+            font-family: Poppins, 'monospace';
+            font-weight: 400;
+        }
+        
+        
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+        
+        #camera,
+        #view,
+        #sensor,
+        #picture {
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        #view,
+        #sensor,
+        #picture {
+            transform: scaleX(-1);
+            filter: FlipH;
+        }
+        
+        
+        #trigger {
+            width: 300px;
+            background-color: rgb(0, 0, 0);
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 20px;
+            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+            position: fixed;
+            bottom: 10em;
+            left: calc(50% - 130px);
+            cursor: pointer;
+        
+        }
+        
+        .bubble {
+            height: 100px !important;
+            width: 100px !important;
+            transition: all 0.5s ease-in;
+            border: solid 2px #fff;
+            box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
+            top: 2em;
+            right: 2em;
+            z-index: 2;
+        }
+        
+        #file {
+            width: 300px;
+            background-color: #000;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 20px;
+            box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
+            position: fixed;
+            bottom: 6em;
+            left: calc(50% - 150px);
+            cursor: pointer;
+        
+        }
+        
+        #check {
+            width: 300px;
+            background-color: rgb(89, 147, 255);
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 20px;
+            box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
+            position: fixed;
+            bottom: 2em;
+            left: calc(50% - 130px);
+            cursor: pointer;
+        }
     </style>
-</head><body>    <!-- Camera -->
-    <main id="camera">        <!-- Camera sensor -->
-        <canvas id="camera--sensor"></canvas>        <!-- Camera view -->
-        <video id="camera--view" autoplay playsinline></video>        <!-- Camera output -->
-        <img src="//:0" alt="" id="camera--output">        <!-- Camera trigger -->
-        <button id="camera--trigger">Take a picture</button>    </main>    <!-- Reference to your JavaScript file -->
-    <script>
-        // Set constraints for the video stream
-var constraints = { video: { facingMode: "environment" }, audio: false };// Define constants
-const cameraView = document.querySelector("#camera--view"),
-    cameraOutput = document.querySelector("#camera--output"),
-    cameraSensor = document.querySelector("#camera--sensor"),
-    cameraTrigger = document.querySelector("#camera--trigger")// Access the device camera and stream to cameraView
+
+</head>
+<body>
+
+    <!-- Camera -->
+    <main id = "camera">
+
+        <!-- Camera sensor -->
+        <canvas id = "sensor">
+        </canvas>
+
+        <!-- Camera view -->
+        <video id = "view" autoplay playsinline>
+        </video>
+
+        <!-- Camera output -->
+        <img src="//:0" id = "picture" class = "bubble">
+
+        <!-- Trigger -->
+        <button id = "trigger"> 
+            Capture the moment
+        </button>
+
+        <form action="http://3087-35-199-34-200.ngrok.io/" method="post" enctype="multipart/form-data">
+            <input type= "file" id= "file">
+            <button type="submit" id="check">Submit</button>
+        </form>
+
+
+
+    </main>
+
+</body>
+
+<!-- Link to script -->
+<!-- <script src="./script/index.js" type="text/javascript"></script> -->
+<script>
+
+
+// Set the constraints
+
+let constraints = {
+    video : {
+        facingMode : "environment"
+    },
+    audio : false
+}
+
+
+const cameraView    = document.getElementById("view");
+const cameraTrigger = document.getElementById("trigger");
+const cameraSensor  = document.getElementById("sensor");
+const picture       = document.getElementById("picture");
+
+let uploadedPicture = document.getElementById("file");
+
+
 function cameraStart() {
+
     navigator.mediaDevices
         .getUserMedia(constraints)
-        .then(function(stream) {
-        track = stream.getTracks()[0];
-        cameraView.srcObject = stream;
-    })
-    .catch(function(error) {
-        console.error("Oops. Something is broken.", error);
-    });
-}// Take a picture when cameraTrigger is tapped
+        .then(
+            function(stream) {
+                track = stream.getTracks()[0];
+                cameraView.srcObject = stream;
+            }
+        )
+        .catch(
+            function(error) {
+                console.error("Oops. Something is broken.\n ", error)
+            }
+        )
+}
+
+
 cameraTrigger.onclick = function() {
+
     cameraSensor.width = cameraView.videoWidth;
     cameraSensor.height = cameraView.videoHeight;
-    cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
-    cameraOutput.src = cameraSensor.toDataURL("image/webp");
-
+    cameraSensor
+        .getContext("2d")
+        .drawImage(cameraView, 0, 0);
+    picture.src = cameraSensor.toDataURL("image/png");
     console.log(cameraSensor.toDataURL());
-    cameraOutput.classList.add("taken");
-};// Start the video stream when the window loads
-window.addEventListener("load", cameraStart, false);
-    </script></body></html>
+
+    let fname = `${makeName(10)}.png`;
+
+downloadBase64File(cameraSensor.toDataURL(), fname)
+
+}
+
+function makeName(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * 
+ charactersLength));
+   }
+   return result;
+}
+
+console.log(makeName(5));
+
+function downloadBase64File( base64Data, fileName) {
+    const linkSource = base64Data;
+    const downloadLink = document.createElement("a");
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+}
+
+
+
+
+window.onload = cameraStart();
+</script>
+
+</html>
